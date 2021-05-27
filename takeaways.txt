@@ -1,0 +1,6 @@
+=> After deployment contract is immutable. 
+=> Struct packing can be done to save gas.
+=> You can pass a storage pointer to a struct as an argument to a private or internal function.
+=> Function modifiers can have arguments that will be paramenter of the calling function.
+=> View functions don't cost any gas when they're called externally by a user.(external view function)
+=> Using storage is very expensive in terms of gas cost as it involves writing permanently to blockchain.

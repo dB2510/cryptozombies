@@ -23,8 +23,16 @@ contract KittyInterface {
 // Here inheritance works using "is" keyword. Here ZombieFeeding inherits from ZombieFactory
 contract ZombieFeeding is ZombieFactory {
 
-  address ckAddress = 0x06012c8cf97BEaD5deAe237070F9587f8E7A266d;
-  KittyInterface kittyContract = KittyInterface(ckAddress);
+  KittyInterface kittyContract;
+
+  function setKittyContractAddress(address _address) external onlyOwner {
+    kittyContract = KittyInterface(_address);
+  }
+
+  function _triggerCooldown(Zombie storage _zombie) internal {
+    // now is the keyword specified to return current UNIX timestamp
+    _zombie.readyTime = uint32(now + cooldownTime);
+  }
 
   // storage and memory keyword can be compared to hard disk and RAM
   // using storage keyword the data will be stored permanently on blockchain while

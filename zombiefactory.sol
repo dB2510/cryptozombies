@@ -1,6 +1,8 @@
 pragma solidity >=0.5.0 <0.6.0;
 
-contract ZombieFactory {
+import "./ownable.sol";
+
+contract ZombieFactory is Ownable {
 
     // events are a way for our contract to communicate that something happened on the blockchain
     // to your app frontend which can be listening for certain events and take action when they happen
@@ -8,10 +10,13 @@ contract ZombieFactory {
 
     uint dnaDigits = 16;
     uint dnaModulus = 10 ** dnaDigits;
+    uint cooldownTime = 1 days;
 
     struct Zombie {
         string name;
         uint dna;
+        uint32 level;
+        uint32 readyTime;
     }
 
     Zombie[] public zombies;
@@ -23,7 +28,7 @@ contract ZombieFactory {
     // in solidity when passing strings, arrays or structs pass by reference is used
     // conventionally we use _ before every private function and function parameters 
     function _createZombie(string memory _name, uint _dna) internal { // internal keyword lets this function visible to its daughter contracts and private as well
-        uint id = zombies.push(Zombie(_name, _dna)) - 1;
+        uint id = zombies.push(Zombie(_name, _dna, 1, uint32(now + cooldownTime))) - 1;
         zombieToOwner[id] = msg.sender;
         ownerZombieCount[msg.sender]++;
         // and fire it here
