@@ -1,8 +1,13 @@
 pragma solidity >=0.5.0 <0.6.0;
 
 import "./ownable.sol";
+import "./safemath.sol";
 
 contract ZombieFactory is Ownable {
+
+    using SafeMath for uint256;
+    using SafeMath32 for uint32;
+    using SafeMath16 for uint16;
 
     // events are a way for our contract to communicate that something happened on the blockchain
     // to your app frontend which can be listening for certain events and take action when they happen
@@ -32,7 +37,7 @@ contract ZombieFactory is Ownable {
     function _createZombie(string memory _name, uint _dna) internal { // internal keyword lets this function visible to its daughter contracts and private as well
         uint id = zombies.push(Zombie(_name, _dna, 1, uint32(now + cooldownTime), 0, 0)) - 1;
         zombieToOwner[id] = msg.sender;
-        ownerZombieCount[msg.sender]++;
+        ownerZombieCount[msg.sender] = ownerZombieCount[msg.sender].add(1);
         // and fire it here
         emit NewZombie(id, _name, _dna);
     }

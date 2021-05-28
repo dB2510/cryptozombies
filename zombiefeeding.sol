@@ -25,7 +25,7 @@ contract ZombieFeeding is ZombieFactory {
 
   KittyInterface kittyContract;
 
-  modifier ownerOf(uint _zombieId) {
+  modifier onlyOwnerOf(uint _zombieId) {
     require(msg.sender == zombieToOwner[_zombieId]);
     _;
   }
@@ -46,7 +46,7 @@ contract ZombieFeeding is ZombieFactory {
   // storage and memory keyword can be compared to hard disk and RAM
   // using storage keyword the data will be stored permanently on blockchain while
   // Memory variables are temporary, and are erased between external function calls to your contract.
-  function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal ownerOf(_zombieId) {
+  function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal onlyOwnerOf(_zombieId) {
     Zombie storage myZombie = zombies[_zombieId];
     require(_isReady(myZombie));
     _targetDna = _targetDna % dnaModulus;
